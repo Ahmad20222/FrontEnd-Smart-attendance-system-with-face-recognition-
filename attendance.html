@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Attendance{% endblock %}
+{% block content %}
+<h1>Attendance Records</h1>
+<div id='attendance-list'>Loading...</div>
+{% endblock %}
+{% block scripts %}
+<script>
+async function loadAttendance(){
+  const root=document.getElementById('attendance-list');
+  try{
+    const res=await fetch('/api/attendance');
+    if(res.status===200){
+      const data=await res.json();
+      let html='<table class="table table-striped"><thead><tr><th>#</th><th>Name</th><th>Time</th></tr></thead><tbody>';
+      data.forEach((r,i)=>html+=`<tr><td>${i+1}</td><td>${r.name||r.user||'—'}</td><td>${r.time||r.timestamp||'—'}</td></tr>`);
+      html+='</tbody></table>';
+      root.innerHTML=html;
+    }else root.innerHTML='Error loading data';
+  }catch{root.innerHTML='Backend unreachable';}
+}
+loadAttendance();
+</script>
+{% endblock %}

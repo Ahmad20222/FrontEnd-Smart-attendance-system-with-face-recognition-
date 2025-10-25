@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+<p>Welcome, <b>{{ admin }}</b>.</p>
+<div id='attendance-table-root'>Loading...</div>
+{% endblock %}
+{% block scripts %}
+<script>
+async function loadRecentAttendance(){
+  const root=document.getElementById('attendance-table-root');
+  try{
+    const res=await fetch('/api/attendance');
+    if(res.status===200){
+      const data=await res.json();
+      let html='<table class="table table-sm"><thead><tr><th>#</th><th>Name</th><th>Time</th></tr></thead><tbody>';
+      data.slice(0,10).forEach((r,i)=>html+=`<tr><td>${i+1}</td><td>${r.name||r.user||'—'}</td><td>${r.time||r.timestamp||'—'}</td></tr>`);
+      html+='</tbody></table>';
+      root.innerHTML=html;
+    }else root.innerHTML='Failed to load data';
+  }catch{root.innerHTML='Backend unreachable';}
+}
+loadRecentAttendance();
+</script>
+{% endblock %}
