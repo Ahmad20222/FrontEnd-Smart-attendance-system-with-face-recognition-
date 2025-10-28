@@ -2,11 +2,14 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 import requests, os
 from datetime import timedelta
 
-app = Flask(__name__)
-app.secret_key = os.environ.get('FLASK_SECRET', 'dev-secret')
-app.permanent_session_lifetime = timedelta(hours=8)
+app = Flask(__name__, template_folder='template')
+app.secret_key = os.environ.get("SECRET_KEY", "479e2b3b4a6a4364899f6e442a5f1cd6c6bc97f870f4901623c63e53b055f5ab")  # added so sessions work
+app.permanent_session_lifetime = timedelta(hours=1)
 
-BACKEND_URL = os.environ.get('BACKEND_URL', 'http://localhost:8000')
+BACKEND_URL = os.environ.get('BACKEND_URL', 'http://127.0.0.1:8000')
+USE_BACKEND = os.environ.get('USE_BACKEND', '1') == '1'  # set USE_BACKEND=0 to disable backend calls
+
+
 
 @app.route('/')
 def index():
@@ -14,20 +17,42 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+    if request.method == "GET":
         try:
-            resp = requests.post(f'{BACKEND_URL}/api/auth/login', json={'username': username, 'password': password}, timeout=5)
-            if resp.status_code == 200:
-                data = resp.json()
-                session['admin'] = username
-                session['token'] = data.get('access_token')
-                return redirect(url_for('dashboard'))
-            return render_template('login.html', error='Login failed')
-        except requests.exceptions.RequestException:
-            return render_template('login.html', error='Backend unreachable')
-    return render_template('login.html')
+            return render_template("login.html")
+        except Exception as e:
+            app.logger.exception("Template render error")
+            return f"Template render error: {e}", 500
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    if USE_BACKEND:
+        try:
+            resp = requests.post(
+                f"{BACKEND_URL}/admin/login",
+                data={"username": username, "password": password},
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
+                timeout=10,
+            )
+        except requests.RequestException:
+            return render_template("login.html", error="Backend unreachable"), 502
+
+        if resp.status_code != 200:
+            return render_template("login.html", error="Invalid credentials"), 401
+
+        data = resp.json()
+        # store token & admin in server-side session
+        session["access_token"] = data.get("access_token")
+        session["admin"] = data.get("admin")
+        return redirect(url_for("dashboard"))
+
+    # Dev fallback (no backend)
+    if username == "admin" and password == "admin":
+        session["access_token"] = "dev-token"
+        session["admin"] = {"email": "admin"}
+        return redirect(url_for("dashboard"))
+    return render_template("login.html", error="Invalid credentials"), 401
+
 
 @app.route('/logout')
 def logout():
@@ -38,16 +63,27 @@ def logout():
 def dashboard():
     if 'admin' not in session:
         return redirect(url_for('login'))
-    return render_template('dashboard.html', admin=session.get('admin'))
+    admin = session.get('admin')
+    return render_template('dashboard.html', admin=admin)
 
 @app.route('/api/attendance')
 def attendance_api_proxy():
     if 'admin' not in session:
         return jsonify({'detail': 'Unauthorized'}), 401
-    headers = {'Authorization': f"Bearer {session['token']}"} if session.get('token') else {}
+
+    # If backend calls are disabled, return an empty result (or a stub)
+    if not USE_BACKEND:
+        return jsonify([]), 200
+
+    token = session.get('access_token')
+    headers = {'Authorization': f"Bearer {token}"} if token else {}
     try:
-        resp = requests.get(f'{BACKEND_URL}/api/attendance', headers=headers, timeout=5)
-        return jsonify(resp.json()), resp.status_code
+        resp = requests.get(f'{BACKEND_URL}/attendance', headers=headers, timeout=5)
+        try:
+            payload = resp.json()
+        except ValueError:
+            payload = {'detail': resp.text}
+        return jsonify(payload), resp.status_code
     except requests.exceptions.RequestException:
         return jsonify({'detail': 'Backend unreachable'}), 503
 
@@ -57,13 +93,14 @@ def attendance_page():
         return redirect(url_for('login'))
     return render_template('attendance.html')
 
+
 @app.route('/report')
 def download_report():
     if 'admin' not in session:
         return redirect(url_for('login'))
     headers = {'Authorization': f"Bearer {session['token']}"} if session.get('token') else {}
     try:
-        resp = requests.get(f'{BACKEND_URL}/api/attendance/report', headers=headers, timeout=10, stream=True)
+        resp = requests.get(f'{BACKEND_URL}/attendance/report', headers=headers, timeout=10, stream=True)
         if resp.status_code == 200:
             tmp_path = 'attendance_report.csv'
             with open(tmp_path, 'wb') as f:
@@ -75,4 +112,4 @@ def download_report():
     return redirect(url_for('dashboard'))
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, use_reloader=True, port=5000)

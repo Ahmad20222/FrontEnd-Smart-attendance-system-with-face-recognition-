@@ -1,38 +1,28 @@
-const BACKEND_URL = "http://localhost:8000"; // Change if backend hosted elsewhere
+const BACKEND_URL = "http://127.0.0.1:8000"; // Change if backend hosted elsewhere
 
 // === LOGIN FUNCTIONALITY ===
-async function login() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const errorElement = document.getElementById("error");
 
-  // Input validation
-  if (!username || !password) {
-    errorElement.textContent = "Please enter both username and password.";
-    return;
+async function login(email, password) {
+  const url = `${BACKEND_URL}/admin/login`;
+  const body = new URLSearchParams();
+  body.append("username", email); // OAuth2PasswordRequestForm expects "username"
+  body.append("password", password);
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: body.toString(),
+  });
+
+  if (!res.ok) {
+    const errText = await res.text().catch(()=>null);
+    throw new Error("Login failed: " + (errText || res.status));
   }
-
-  try {
-    const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (response.status === 200) {
-      const data = await response.json();
-      localStorage.setItem("admin", username);
-      localStorage.setItem("token", data.access_token || "");
-      window.location.href = "dashboard.html";
-    } else if (response.status === 401) {
-      errorElement.textContent = "Invalid username or password.";
-    } else {
-      errorElement.textContent = "Login failed. Please try again.";
-    }
-  } catch (error) {
-    console.error("Login error:", error);
-    errorElement.textContent = "Server unreachable. Please check your connection.";
-  }
+  const data = await res.json(); // { access_token, token_type, admin }
+  // store token (localStorage/sessionStorage or memory)
+  localStorage.setItem("token", data.access_token);
+  localStorage.setItem("admin", JSON.stringify(data.admin));
+  return data;
 }
 
 // === LOGOUT FUNCTIONALITY ===
@@ -66,7 +56,7 @@ async function loadAttendance() {
   }
 
   try {
-    const response = await fetch(`${BACKEND_URL}/api/attendance`, {
+    const response = await fetch(`${BACKEND_URL}/attendance`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -120,7 +110,7 @@ async function downloadReport() {
   }
 
   try {
-    const response = await fetch(`${BACKEND_URL}/api/attendance/report`, {
+    const response = await fetch(`${BACKEND_URL}/attendance`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -153,3 +143,4 @@ document.addEventListener("DOMContentLoaded", () => {
     loadAttendance();
   }
 });
+

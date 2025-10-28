@@ -16,4 +16,4 @@
    flask run --port 5000
    ```
 
-Backend expected at `http://localhost:8000` (adjust in `app.py`).
+Backend expected at `http://127.0.0.1:8000` (adjust in `app.py`).

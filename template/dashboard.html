@@ -2,7 +2,7 @@
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <h1>Dashboard</h1>
-<p>Welcome, <b>{{ admin }}</b>.</p>
+<p>Welcome, <b> {{admin.first_name}}  {{admin.surname}} </b>.</p>
 <div id='attendance-table-root'>Loading...</div>
 {% endblock %}
 {% block scripts %}
@@ -10,7 +10,7 @@
 async function loadRecentAttendance(){
   const root=document.getElementById('attendance-table-root');
   try{
-    const res=await fetch('/api/attendance');
+    const res=await fetch('/attendance');
     if(res.status===200){
       const data=await res.json();
       let html='<table class="table table-sm"><thead><tr><th>#</th><th>Name</th><th>Time</th></tr></thead><tbody>';

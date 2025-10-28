@@ -9,7 +9,7 @@
 async function loadAttendance(){
   const root=document.getElementById('attendance-list');
   try{
-    const res=await fetch('/api/attendance');
+    const res=await fetch('/attendance');
     if(res.status===200){
       const data=await res.json();
       let html='<table class="table table-striped"><thead><tr><th>#</th><th>Name</th><th>Time</th></tr></thead><tbody>';
