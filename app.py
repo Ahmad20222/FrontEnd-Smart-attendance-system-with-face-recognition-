@@ -7,7 +7,6 @@ app.secret_key = os.environ.get("SECRET_KEY", "479e2b3b4a6a4364899f6e442a5f1cd6c
 app.permanent_session_lifetime = timedelta(hours=1)
 
 BACKEND_URL = os.environ.get('BACKEND_URL', 'http://127.0.0.1:8000')
-USE_BACKEND = os.environ.get('USE_BACKEND', '1') == '1'  # set USE_BACKEND=0 to disable backend calls
 
 
 
@@ -26,32 +25,25 @@ def login():
     username = request.form.get("username")
     password = request.form.get("password")
 
-    if USE_BACKEND:
-        try:
-            resp = requests.post(
-                f"{BACKEND_URL}/admin/login",
-                data={"username": username, "password": password},
-                headers={"Content-Type": "application/x-www-form-urlencoded"},
-                timeout=10,
-            )
-        except requests.RequestException:
-            return render_template("login.html", error="Backend unreachable"), 502
+    try:
+        resp = requests.post(
+            f"{BACKEND_URL}/admin/login",
+            data={"username": username, "password": password},
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            timeout=10,
+        )
+    except requests.RequestException:
+        return render_template("login.html", error="Backend unreachable"), 502
 
-        if resp.status_code != 200:
-            return render_template("login.html", error="Invalid credentials"), 401
+    if resp.status_code != 200:
+        return render_template("login.html", error="Invalid credentials"), 401
 
-        data = resp.json()
-        # store token & admin in server-side session
-        session["access_token"] = data.get("access_token")
-        session["admin"] = data.get("admin")
-        return redirect(url_for("dashboard"))
+    data = resp.json()
+    # store token & admin in server-side session
+    session["access_token"] = data.get("access_token")
+    session["admin"] = data.get("admin")
+    return redirect(url_for("dashboard"))
 
-    # Dev fallback (no backend)
-    if username == "admin" and password == "admin":
-        session["access_token"] = "dev-token"
-        session["admin"] = {"email": "admin"}
-        return redirect(url_for("dashboard"))
-    return render_template("login.html", error="Invalid credentials"), 401
 
 
 @app.route('/logout')
