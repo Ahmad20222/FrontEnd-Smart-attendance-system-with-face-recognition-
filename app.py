@@ -53,10 +53,10 @@ def logout():
 
 @app.route('/dashboard')
 def dashboard():
-    if 'admin' not in session:
-        return redirect(url_for('login'))
+    #if 'admin' not in session:
+    #    return redirect(url_for('login'))
     admin = session.get('admin')
-    return render_template('dashboard.html', admin=admin)
+    return render_template('dashboard.html') #, admin=admin
 
 @app.route('/api/attendance')
 def attendance_api_proxy():
@@ -81,8 +81,8 @@ def attendance_api_proxy():
 
 @app.route('/attendance')
 def attendance_page():
-    if 'admin' not in session:
-        return redirect(url_for('login'))
+    #if 'admin' not in session:
+    #    return redirect(url_for('login'))
     return render_template('attendance.html')
 
 
