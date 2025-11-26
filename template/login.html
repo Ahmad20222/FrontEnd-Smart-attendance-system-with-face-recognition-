@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="css/style.css">
+<title>Login</title>
+<style>
+body { margin:0; padding:0; background:#ffffff; font-family:Arial; }
+.center-page { display:flex; justify-content:center; align-items:center; height:100vh; }
+.card { width:360px; background:#d6d6d6; padding:40px; border-radius:20px; text-align:center; }
+.input-field { width:100%; padding:12px; margin:12px 0; border-radius:10px; border:none; text-align:center; }
+.primary-btn { width:60%; padding:12px; border-radius:20px; border:none; background:#333; color:white; cursor:pointer; }
+.primary-btn:hover { background:#000; }
+</style>
 </head>
 
 <body class="center-page">
 
-    <div class="card">
-        <input id="username" type="text" placeholder="username" class="input-field">
-        <input id="password" type="password" placeholder="password" class="input-field">
-        <button onclick="login()" class="primary-btn">login</button>
-    </div>
+<div class="card">
+    <input id="username" class="input-field" placeholder="username">
+    <input id="password" class="input-field" placeholder="password" type="password">
+    <button onclick="login()" class="primary-btn">login</button>
+</div>
 
-    <script src="js/main.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
