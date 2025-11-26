@@ -1,149 +1,183 @@
-/* ===== Global Setup ===== */
+/* ===========================
+   style.css - Smart Attendance
+   Full reset + robust selectors
+   =========================== */
+
+/* --- Reset / base --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
 body {
-    margin: 0;
-    padding: 0;
-    background: #ffffff;
-    font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: #222;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.4;
 }
 
-/* ===== Centering Pages ===== */
-.center-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+/* --- Utility containers --- */
+.container-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ===== Top Bar ===== */
+/* --- Topbar --- */
 .topbar {
-    width: 100%;
-    padding: 18px 30px;
-    background: #7d7d7d;
-    color: black;
-    font-weight: bold;
-    font-size: 26px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  width: 100%;
+  padding: 16px 28px;
+  background: #7d7d7d;
+  color: #111;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  position: relative;
+  z-index: 10;
+}
+.topbar .brand { font-size: 26px; font-weight: 700; letter-spacing: 0.5px; }
+.topbar .logout-btn {
+  color: #111;
+  text-decoration: none;
+  font-size: 15px;
+  padding: 8px 12px;
+  border-radius: 6px;
 }
 
-.logout-btn {
-    font-size: 18px;
-    text-decoration: none;
-    color: black;
-}
-
-/* ===== Buttons on Dashboard ===== */
-.center-box {
-    margin-top: 140px;
-    display: flex;
-    justify-content: center;
-    gap: 100px;
-}
-
-.menu-btn {
-    background: #d6d6d6;
-    padding: 15px 35px;
-    border-radius: 15px;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-}
-
-/* ===== Login & Enroll grey cards ===== */
+/* --- Generic card for login & enroll --- */
 .card {
-    background: #d6d6d6;
-    padding: 40px;
-    border-radius: 20px;
-    width: 350px;
-    text-align: center;
+  width: 360px;
+  background: #d6d6d6;
+  border-radius: 18px;
+  padding: 36px 28px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  text-align: center;
 }
 
-/* ===== Input Fields ===== */
+/* --- Inputs --- */
 .input-field {
-    width: 100%;
-    padding: 12px;
-    margin: 12px 0;
-    border-radius: 12px;
-    border: none;
-    background: #ffffff;
-    font-size: 16px;
-    text-align: center;
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  margin: 12px 0;
+  border-radius: 10px;
+  border: none;
+  background: #fff;
+  font-size: 15px;
+  text-align: center;
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(0,0,0,0.03);
 }
 
-/* ===== Black Buttons ===== */
-.primary-btn {
-    width: 65%;
-    padding: 13px;
-    border-radius: 20px;
-    border: none;
-    background: #333;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
+/* --- Buttons --- */
+.btn {
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  border-radius: 20px;
+  padding: 12px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
 }
 
-.primary-btn:hover {
-    background: #000;
+.btn-primary {
+  background: #333;
+  color: #fff;
+  width: 60%;
+  margin-top: 12px;
+}
+.btn-primary:hover { background: #000; }
+
+.btn-menu {
+  background: #d6d6d6;
+  color: #111;
+  border-radius: 14px;
+  padding: 14px 36px;
+  font-size: 17px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
 }
 
-/* ==========================================================
-   TAKE ATTENDANCE PAGE
-========================================================== */
+/* --- Dashboard center box --- */
+.center-box {
+  margin-top: 120px;
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  align-items: center;
+}
 
+/* --- Attendance wrapper --- */
 .attendance-container {
-    width: 85%;
-    margin: 40px auto;
-    padding: 20px;
-    background: #d6d6d6;
-    border-radius: 18px;
+  width: 92%;
+  max-width: 1100px;
+  margin: 36px auto;
+  padding: 18px;
+  background: #d6d6d6;
+  border-radius: 16px;
 }
 
-/* Table design */
+/* --- Table styling --- */
 .attendance-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #ececec;
-    border-radius: 15px;
-    overflow: hidden;
+  width: 100%;
+  border-collapse: collapse;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.attendance-table thead th {
+  background: #bfbfbf;
+  color: #111;
+  font-weight: 600;
+  padding: 12px 10px;
+  text-transform: lowercase;
+  font-size: 15px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.attendance-table tbody td {
+  padding: 14px 10px;
+  font-size: 15px;
+  color: #222;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  text-align: center;
 }
 
-.attendance-table th {
-    background: #b5b5b5;
-    padding: 15px;
-    text-align: center;
-    font-size: 18px;
-}
+/* remove bottom border for last row */
+.attendance-table tbody tr:last-child td { border-bottom: none; }
 
-.attendance-table td {
-    padding: 12px;
-    text-align: center;
-    font-size: 16px;
-    border-bottom: 1px solid #cfcfcf;
-}
-
-/* Grey box under table (for camera feed UI) */
+/* --- Face / camera box --- */
 .face-box {
-    width: 100%;
-    height: 260px;
-    background: #cfcfcf;
-    border-radius: 20px;
-    margin-top: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin-top: 18px;
+  background: #cfcfcf;
+  border-radius: 14px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Start Button */
+/* Start button (in face box) */
 .start-btn {
-    background: #eee;
-    padding: 14px 45px;
-    border-radius: 20px;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
+  background: #efefef;
+  border-radius: 16px;
+  padding: 12px 40px;
+  border: none;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+}
+.start-btn:hover { background: #fff; }
+
+/* --- Responsive adjustments --- */
+@media (max-width: 800px) {
+  .center-box { flex-direction: column; gap: 20px; margin-top: 60px; }
+  .card { width: 92%; padding: 28px; }
+  .attendance-container { width: 96%; padding: 12px; }
+  .attendance-table thead th { font-size: 13px; padding: 10px 6px; }
+  .attendance-table tbody td { font-size: 13px; padding: 10px 6px; }
 }
 
-.start-btn:hover {
-    background: white;
-}
+/* --- Small helpers --- */
+.hidden { display: none !important; }
+.text-center { text-align: center; }
