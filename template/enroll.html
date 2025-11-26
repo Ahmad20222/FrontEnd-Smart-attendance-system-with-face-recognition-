@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="css/style.css">
+<title>Enroll</title>
+<style>
+body { margin:0; padding:0; background:#ffffff; font-family:Arial; }
+.center-page { display:flex; justify-content:center; align-items:center; height:100vh; }
+.card { width:360px; background:#d6d6d6; padding:40px; border-radius:20px; text-align:center; }
+.input-field { width:100%; padding:12px; margin:12px 0; border-radius:10px; border:none; text-align:center; }
+.primary-btn { width:60%; padding:12px; border-radius:20px; border:none; background:#333; color:white; cursor:pointer; }
+.primary-btn:hover { background:#000; }
+</style>
 </head>
 
 <body class="center-page">
 
-    <div class="card">
-        <input id="firstName" type="text" placeholder="first name" class="input-field">
-        <input id="lastName" type="text" placeholder="last name" class="input-field">
-        <button class="primary-btn" onclick="enrollStudent()">Enroll</button>
-    </div>
+<div class="card">
+    <input id="firstName" class="input-field" placeholder="first name">
+    <input id="lastName" class="input-field" placeholder="last name">
+    <button onclick="enrollStudent()" class="primary-btn">Enroll</button>
+</div>
 
-    <script src="js/main.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
