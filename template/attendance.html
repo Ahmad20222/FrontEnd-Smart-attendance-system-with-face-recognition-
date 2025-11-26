@@ -1,24 +1,39 @@
-{% extends 'base.html' %}
-{% block title %}Attendance{% endblock %}
-{% block content %}
-<h1>Attendance Records</h1>
-<div id='attendance-list'>Loading...</div>
-{% endblock %}
-{% block scripts %}
-<script>
-async function loadAttendance(){
-  const root=document.getElementById('attendance-list');
-  try{
-    const res=await fetch('/api/attendance');
-    if(res.status===200){
-      const data=await res.json();
-      let html='<table class="table table-striped"><thead><tr><th>#</th><th>Name</th><th>Time</th></tr></thead><tbody>';
-      data.forEach((r,i)=>html+=`<tr><td>${i+1}</td><td>${r.name||r.user||'—'}</td><td>${r.time||r.timestamp||'—'}</td></tr>`);
-      html+='</tbody></table>';
-      root.innerHTML=html;
-    }else root.innerHTML='Error loading data';
-  }catch{root.innerHTML='Backend unreachable';}
-}
-loadAttendance();
-</script>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="topbar">
+        SAS
+        <a class="logout-btn" onclick="logout()">Logout</a>
+    </div>
+
+    <div class="attendance-container">
+
+        <table class="attendance-table">
+            <thead>
+                <tr>
+                    <th>name</th>
+                    <th>email</th>
+                    <th>date</th>
+                    <th>time</th>
+                    <th>status</th>
+                </tr>
+            </thead>
+            <tbody id="attendance-body">
+                <!-- JS fills here -->
+            </tbody>
+        </table>
+
+        <div class="face-box">
+            <button class="start-btn" onclick="startAttendance()">START</button>
+        </div>
+
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
