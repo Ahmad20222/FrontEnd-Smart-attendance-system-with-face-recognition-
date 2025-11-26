@@ -1,39 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="css/style.css">
+<title>Attendance</title>
+<style>
+body { margin:0; padding:0; background:#ffffff; font-family:Arial; }
+.topbar { width:100%; padding:18px 30px; background:#7d7d7d; color:#111;
+         font-size:26px; display:flex; justify-content:space-between; }
+.logout-btn { color:black; text-decoration:none; cursor:pointer; font-size:18px; }
+
+.attendance-container { width:85%; margin:40px auto; background:#d6d6d6;
+                        padding:20px; border-radius:18px; }
+
+.attendance-table { width:100%; border-collapse:collapse; background:#eee;
+                    border-radius:10px; overflow:hidden; }
+.attendance-table th { background:#b5b5b5; padding:15px; }
+.attendance-table td { padding:12px; border-bottom:1px solid #ccc; text-align:center; }
+
+.face-box { width:100%; height:260px; background:#cfcfcf; border-radius:20px;
+            margin-top:25px; display:flex; justify-content:center; align-items:center; }
+
+.start-btn { background:#eee; padding:14px 40px; border-radius:18px; border:none;
+             font-size:18px; cursor:pointer; }
+.start-btn:hover { background:white; }
+</style>
 </head>
 
 <body>
 
-    <div class="topbar">
-        SAS
-        <a class="logout-btn" onclick="logout()">Logout</a>
+<div class="topbar">
+    <span>SAS</span>
+    <a class="logout-btn" onclick="logout()">Logout</a>
+</div>
+
+<div class="attendance-container">
+
+    <table class="attendance-table">
+        <thead>
+            <tr>
+                <th>name</th>
+                <th>email</th>
+                <th>date</th>
+                <th>time</th>
+                <th>status</th>
+            </tr>
+        </thead>
+        <tbody id="attendance-body">
+        </tbody>
+    </table>
+
+    <div class="face-box">
+        <button class="start-btn" onclick="startAttendance()">START</button>
     </div>
 
-    <div class="attendance-container">
+</div>
 
-        <table class="attendance-table">
-            <thead>
-                <tr>
-                    <th>name</th>
-                    <th>email</th>
-                    <th>date</th>
-                    <th>time</th>
-                    <th>status</th>
-                </tr>
-            </thead>
-            <tbody id="attendance-body">
-                <!-- JS fills here -->
-            </tbody>
-        </table>
-
-        <div class="face-box">
-            <button class="start-btn" onclick="startAttendance()">START</button>
-        </div>
-
-    </div>
-
-    <script src="js/main.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
