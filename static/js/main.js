@@ -56,17 +56,15 @@ function loadAttendance() {
     if (!tableBody) return; // Only run on attendance page
 
     const sampleData = [
-        { name: "John Doe", email: "john@example.com", date: "2025-11-22", time: "09:41", status: "present" },
-        { name: "Raghda Ali", email: "raghda@example.com", date: "2025-11-22", time: "09:43", status: "present" },
+        { name: "John Doe", date: "2025-11-22", status: "present" },
+        { name: "Raghda Ali", date: "2025-11-22", status: "present" },
     ];
 
     sampleData.forEach(row => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>${row.name}</td>
-            <td>${row.email}</td>
             <td>${row.date}</td>
-            <td>${row.time}</td>
             <td>${row.status}</td>
         `;
         tableBody.appendChild(tr);
