@@ -1,17 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login</title>
-<style>
-body { margin:0; padding:0; background:#ffffff; font-family:Arial; }
-.center-page { display:flex; justify-content:center; align-items:center; height:100vh; }
-.card { width:360px; background:#d6d6d6; padding:40px; border-radius:20px; text-align:center; }
-.input-field { width:100%; padding:12px; margin:12px 0; border-radius:10px; border:none; text-align:center; }
-.primary-btn { width:60%; padding:12px; border-radius:20px; border:none; background:#333; color:white; cursor:pointer; }
-.primary-btn:hover { background:#000; }
-</style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-
 <body class="center-page">
 
 <div class="card">
@@ -20,6 +11,6 @@ body { margin:0; padding:0; background:#ffffff; font-family:Arial; }
     <button onclick="login()" class="primary-btn">login</button>
 </div>
 
-<script src="js/main.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
