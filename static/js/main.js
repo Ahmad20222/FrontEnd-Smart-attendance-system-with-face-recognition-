@@ -1,8 +1,7 @@
-/* =======================================================
-   Smart Attendance System - main.js
-   ======================================================= */
 
-const BACKEND_URL = "http://localhost:8000";   
+// BACKEND URL (change later if needed)
+const BACKEND_URL = "http://localhost:8000";  
+
 
 /* =======================================================
    LOGIN FUNCTION
@@ -16,17 +15,19 @@ function login() {
         return;
     }
 
-    // Placeholder (connect to backend later)
+    // Placeholder until backend is added
     alert("Login successful");
-    window.location.href = "dashboard.html";
+    window.location.href = "/dashboard";
 }
+
 
 /* =======================================================
    LOGOUT FUNCTION
    ======================================================= */
 function logout() {
-    window.location.href = "login.html";
+    window.location.href = "/";
 }
+
 
 /* =======================================================
    ENROLL FUNCTION
@@ -40,10 +41,11 @@ function enrollStudent() {
         return;
     }
 
-    // Placeholder (connect to backend later)
+    // Placeholder
     alert(`Enrolled: ${fname} ${lname}`);
-    window.location.href = "dashboard.html";
+    window.location.href = "/dashboard";
 }
+
 
 /* =======================================================
    LOAD ATTENDANCE TABLE
@@ -51,17 +53,15 @@ function enrollStudent() {
 function loadAttendance() {
     const tableBody = document.getElementById("attendance-body");
 
-    if (!tableBody) return; // Not on attendance page
+    if (!tableBody) return; // Only run on attendance page
 
-    // Example placeholder data
-    const demoData = [
+    const sampleData = [
         { name: "John Doe", email: "john@example.com", date: "2025-11-22", time: "09:41", status: "present" },
         { name: "Raghda Ali", email: "raghda@example.com", date: "2025-11-22", time: "09:43", status: "present" },
     ];
 
-    demoData.forEach(row => {
+    sampleData.forEach(row => {
         const tr = document.createElement("tr");
-
         tr.innerHTML = `
             <td>${row.name}</td>
             <td>${row.email}</td>
@@ -69,20 +69,21 @@ function loadAttendance() {
             <td>${row.time}</td>
             <td>${row.status}</td>
         `;
-
         tableBody.appendChild(tr);
     });
 }
+
 
 /* =======================================================
    START ATTENDANCE
    ======================================================= */
 function startAttendance() {
-    alert("Attendance started (camera would open here)");
+    alert("Attendance started. (Face recognition will run here later.)");
 }
 
+
 /* =======================================================
-   AUTO RUN ON PAGE LOAD
+   AUTO LOAD DATA
    ======================================================= */
 document.addEventListener("DOMContentLoaded", () => {
     loadAttendance();
